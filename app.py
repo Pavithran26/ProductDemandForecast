@@ -8,24 +8,18 @@ import base64
 import matplotlib.dates as mdates
 
 app = Flask(__name__)
-
-# Load dataset
 try:
     data = pd.read_csv('Historical-Product-Demand.csv')
     # Convert 'Order_Demand' to numeric, handling potential errors
     data['Order_Demand'] = pd.to_numeric(data['Order_Demand'], errors='coerce')
     data.dropna(subset=['Order_Demand'], inplace=True)
     data['Order_Demand'] = data['Order_Demand'].astype(int)
-
 except FileNotFoundError:
     print("Error: 'Historical-Product-Demand.csv' not found. Place the file in the same directory as the script.")
     exit()
 except Exception as e:
     print(f"Error loading or processing the data file: {e}")
     exit()
-
-
-# Prepare data for ARIMA
 def prepare_data(product_code):
     product_data = data[data['Product_Code'] == product_code].copy()
 
